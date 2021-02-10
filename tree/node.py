@@ -9,7 +9,7 @@ class Node:
     params: NodeParams = None
 
     def __init__(self, json: Dict, parent=None):
-        print(json)
+        # print(json)
 
         if "name" in json:
             self.name = json["name"]
