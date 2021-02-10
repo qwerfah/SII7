@@ -1,4 +1,4 @@
-from dialog_system import DialogSystem
+from dialog_system.dialog_system import DialogSystem
 from accessify import private
 
 
