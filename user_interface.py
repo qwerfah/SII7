@@ -1,4 +1,6 @@
 from dialog_system.dialog_system import DialogSystem
+import dialog_system.resources as resources
+
 from accessify import private
 
 
@@ -24,9 +26,4 @@ class UserInterface:
 
     @staticmethod
     def show_intro() -> str:
-        print("Здравствуйте, я – мини-ИИ для помощи в выборе " \
-              "физической компьютерной памяти.\nДля начала работы " \
-              "просто введите один из типовых запросов, например,\n" \
-              "«Мне нужна оперативная память» или «Мне нужна память " \
-              "с объемом носителя не менее 10 Тб».\nЧтобы узнать " \
-              "подробнее, напишите «Помощь», или «Нужна помощь».")
+        print(resources.intro)

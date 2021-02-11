@@ -7,5 +7,6 @@ class ParamType(Enum):
     Speed = 2,
     Cost = 3,
     Purpose = 4,
-    Types = 5
+    Types = 5,
+    Unknown = 6
 

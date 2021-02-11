@@ -1,5 +1,6 @@
 from tree.tree import Tree
 from dialog_system.action_type import ActionType
+from dialog_system.param_type import ParamType
 from tree.node_params import NodeParams
 import dialog_system.resources as resources
 
@@ -55,13 +56,22 @@ class DialogSystem:
         return list(map(lambda word: self.analyzer.parse(word)[0].normal_form, words))
 
     @private
-    def extract_param(self, message: str): pass
+    def extract_param(self, words: List[str], prev_idx: int, curr_idx: int, next_idx: int, params: NodeParams): pass
+        
 
     @private
-    def extract_params(self, words: List[str]):
+    def extract_params_by_words(self, words: List[str]):
         params: NodeParams = NodeParams()
+        prev_idx: int = 0
+        curr_idx: int = 0
+        next_idx: int = 0
 
-        for w1, w2 in self.pairs(words): pass
+        for i in range(len(words)):
+            param: ParamType = resources.param_synonyms.get(words[i], ParamType.Unknown)
+            if (param != ParamType.Unknown):
+                prev_idx, curr_idx, next_idx = curr_idx, next_idx, i
+                self.extract_param(words, prev_idx, curr_idx, next_idx, params)
+            else: pass
 
     @private
     def pairs(self, lst: List[any]):
