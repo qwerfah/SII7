@@ -1,10 +1,10 @@
 from tree.tree import Tree
 from dialog_system.action_type import ActionType
-from dialog_system.param_type import ParamType
-from tree.node_params import NodeParams
+from dialog_system.params_extractor import ParamsExtractor
+from dialog_system.search_params import SearchParams
 import dialog_system.resources as resources
 
-from typing import List, Dict, Callable
+from typing import List, Dict, Callable, Tuple
 from accessify import private
 import pymorphy2
 import json
@@ -18,6 +18,7 @@ class DialogSystem:
 
     tree: Tree
     analyzer = pymorphy2.MorphAnalyzer()
+    params_extractor: ParamsExtractor = ParamsExtractor()
     translation: Dict[str, str] = str.maketrans(dict.fromkeys(string.punctuation.replace("-", ""), " "))
 
     def __init__(self, tree: Tree = None):
@@ -31,13 +32,21 @@ class DialogSystem:
         words: List[str] = self.parse(message)
         actions: List[ActionType] = list(map(lambda pair: resources.action_synonyms.get(
             pair[0] + pair[1], ActionType.Unknown), self.pairs(words)))
-        print(actions)
-        actions = list(map(lambda word: resources.action_synonyms.get(word, ActionType.Unknown), words))
-        print(actions)
+        # print(actions)
+
+        actions += list(map(lambda word: resources.action_synonyms.get(word, ActionType.Unknown), words))
+        # print(actions)
+
         actions = sorted(actions, key=lambda act: act.value, reverse=False)
-        print(actions)
-        action = self.actions.get(actions.pop())
-        print(action)
+        # print(actions)
+
+        action_type: ActionType = actions.pop()
+        action: Callable[[], str] = self.actions.get(action_type)
+
+        if action_type == ActionType.Search:
+            params: SearchParams = self.params_extractor.extract_params_by_words(words)
+            # print(params)
+            return action(self, params)
 
         return action(self)
 
@@ -56,25 +65,7 @@ class DialogSystem:
         return list(map(lambda word: self.analyzer.parse(word)[0].normal_form, words))
 
     @private
-    def extract_param(self, words: List[str], prev_idx: int, curr_idx: int, next_idx: int, params: NodeParams): pass
-        
-
-    @private
-    def extract_params_by_words(self, words: List[str]):
-        params: NodeParams = NodeParams()
-        prev_idx: int = 0
-        curr_idx: int = 0
-        next_idx: int = 0
-
-        for i in range(len(words)):
-            param: ParamType = resources.param_synonyms.get(words[i], ParamType.Unknown)
-            if (param != ParamType.Unknown):
-                prev_idx, curr_idx, next_idx = curr_idx, next_idx, i
-                self.extract_param(words, prev_idx, curr_idx, next_idx, params)
-            else: pass
-
-    @private
-    def pairs(self, lst: List[any]):
+    def pairs(self, lst: List[any]) -> List[Tuple[any, any]]:
         for i in range(1, len(lst)):
             yield lst[i - 1], lst[i]
 
@@ -83,7 +74,13 @@ class DialogSystem:
         return "Помощь"
 
     @private
-    def search(self) -> str: pass
+    def search(self, params: SearchParams) -> str:
+        print(params.capacity_range)
+        print(params.speed_range)
+        print(params.cost_range)
+        print(params.year_range)
+        print(params.purpose)
+        print(params.memory_types)
 
     @private
     def unknown(self) -> str:
@@ -91,7 +88,7 @@ class DialogSystem:
         return resources.unknown_messages[random.randint(0, len(resources.unknown_messages) - 1)]
 
     @private
-    def exit(self):
+    def exit(self) -> str:
         return "Завершение работы..."
 
     actions: Dict[ActionType, Callable[[], str]] = {
@@ -100,4 +97,3 @@ class DialogSystem:
         ActionType.Exit: exit,
         ActionType.Unknown: unknown
     }
-

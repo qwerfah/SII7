@@ -3,13 +3,6 @@ from typing import List
 
 
 class NodeParams:
-    max_storage_capacity: float
-    release_year: int
-    max_speed: float
-    average_cost: float
-    is_general_purpose: bool
-    memory_types: List[MemoryType]
-
     def __init__(self,
                  max_storage_capacity: float,
                  release_year: int,
@@ -24,9 +17,9 @@ class NodeParams:
         if average_cost < 0:
             raise ValueError("Стоимость не ожет быть отрицательной")
 
-        self.max_storage_capacity = max_storage_capacity
-        self.release_year = release_year
-        self.max_speed = max_speed
-        self.average_cost = average_cost
-        self.is_general_purpose = is_general_purpose
-        self.memory_types = memory_types
+        self.max_storage_capacity: float = max_storage_capacity
+        self.release_year: int = release_year
+        self.max_speed: float = max_speed
+        self.average_cost: float = average_cost
+        self.is_general_purpose: bool = is_general_purpose
+        self.memory_types: List[MemoryType] = memory_types

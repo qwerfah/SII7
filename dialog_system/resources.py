@@ -8,15 +8,20 @@ action_synonyms: Dict[str, ParamType] = {
     "уметь": ActionType.Help,
     "мочь": ActionType.Help,
     "подсказать": ActionType.Help,
+    "нужныйпомощь": ActionType.Help,
+    "нужныйпомочь": ActionType.Help,
 
     "найти": ActionType.Search,
     "отыскать": ActionType.Search,
     "искать": ActionType.Search,
     "поиск": ActionType.Search,
     "подобрать": ActionType.Search,
-    "нужный": ActionType.Search,
-    "необходимый": ActionType.Search,
-    "требоваться": ActionType.Search,
+    "нужныйнайти": ActionType.Search,
+    "нужныйпамять": ActionType.Search,
+    "необходимыйнайти": ActionType.Search,
+    "необходимыйпамять": ActionType.Search,
+    "требоватьсянайти": ActionType.Search,
+    "требоватьсяпамять": ActionType.Search,
     "показать": ActionType.Search,
     "отобразить": ActionType.Search,
     "помочьнайти": ActionType.Search,
@@ -34,8 +39,8 @@ action_synonyms: Dict[str, ParamType] = {
 }
 
 param_synonyms: Dict[str, ParamType] = {
-    "объем": ParamType.Capacity,
-    "емкость": ParamType.Capacity,
+    "объём": ParamType.Capacity,
+    "ёмкость": ParamType.Capacity,
     "размер": ParamType.Capacity,
     "вместительность": ParamType.Capacity,
 
