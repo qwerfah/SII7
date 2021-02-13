@@ -1,7 +1,6 @@
-from user_interface import UserInterface
 import pymorphy2
-from typing import Dict, List, Tuple
-from functools import reduce
+
+from user_interface import UserInterface
 
 if __name__ == "__main__":
     analyzer = pymorphy2.MorphAnalyzer()

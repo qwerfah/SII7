@@ -1,7 +1,5 @@
-from dialog_system.dialog_system import DialogSystem
 import dialog_system.resources as resources
-
-from accessify import private
+from dialog_system.dialog_system import DialogSystem
 
 
 class UserInterface:

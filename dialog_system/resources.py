@@ -1,6 +1,7 @@
-from dialog_system.param_type import ParamType
+from typing import List, Dict
+
 from dialog_system.action_type import ActionType
-from typing import List, Dict, Callable
+from dialog_system.param_type import ParamType
 
 action_synonyms: Dict[str, ParamType] = {
     "помощь": ActionType.Help,
@@ -15,7 +16,6 @@ action_synonyms: Dict[str, ParamType] = {
     "отыскать": ActionType.Search,
     "искать": ActionType.Search,
     "поиск": ActionType.Search,
-    "подобрать": ActionType.Search,
     "нужныйнайти": ActionType.Search,
     "нужныйпамять": ActionType.Search,
     "необходимыйнайти": ActionType.Search,
@@ -26,9 +26,7 @@ action_synonyms: Dict[str, ParamType] = {
     "отобразить": ActionType.Search,
     "помочьнайти": ActionType.Search,
     "помочьотыскать": ActionType.Search,
-    "подобрать": ActionType.Search,
     "помочьподобрать": ActionType.Search,
-
 
     "выйти": ActionType.Exit,
     "конец": ActionType.Exit,
@@ -70,8 +68,8 @@ unknown_messages: List[str] = [
 ]
 
 intro: str = "Здравствуйте, я – мини-ИИ для помощи в выборе " \
-              "физической компьютерной памяти.\nДля начала работы " \
-              "просто введите один из типовых запросов, например,\n" \
-              "«Мне нужна оперативная память» или «Мне нужна память " \
-              "с объемом носителя не менее 10 Тб».\nЧтобы узнать " \
-              "подробнее, напишите «Помощь», или «Нужна помощь»."
+             "физической компьютерной памяти.\nДля начала работы " \
+             "просто введите один из типовых запросов, например,\n" \
+             "«Мне нужна оперативная память» или «Мне нужна память " \
+             "с объемом носителя не менее 10 Тб».\nЧтобы узнать " \
+             "подробнее, напишите «Помощь», или «Нужна помощь»."
