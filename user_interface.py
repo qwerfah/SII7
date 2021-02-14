@@ -19,8 +19,11 @@ class UserInterface:
             answer = self.dialog_system.answer(message)
             print(answer)
 
-            if answer == "Завершение работы...":
+            try:
+                resources.exit_messages.index(answer)
                 break
+            except ValueError:
+                pass
 
     @staticmethod
     def show_intro() -> str:

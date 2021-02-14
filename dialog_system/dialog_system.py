@@ -2,9 +2,11 @@ from tree.tree import Tree
 from dialog_system.action_type import ActionType
 from dialog_system.params_extractor import ParamsExtractor
 from dialog_system.search_params import SearchParams
+from tree.node import Node
 import dialog_system.resources as resources
 
 from typing import List, Dict, Callable, Tuple
+from functools import reduce
 from accessify import private
 import pymorphy2
 import json
@@ -30,22 +32,18 @@ class DialogSystem:
 
     def answer(self, message: str) -> str:
         words: List[str] = self.parse(message)
+        print(words)
         actions: List[ActionType] = list(map(lambda pair: resources.action_synonyms.get(
             pair[0] + pair[1], ActionType.Unknown), self.pairs(words)))
-        # print(actions)
 
         actions += list(map(lambda word: resources.action_synonyms.get(word, ActionType.Unknown), words))
-        # print(actions)
-
         actions = sorted(actions, key=lambda act: act.value, reverse=False)
-        # print(actions)
-
         action_type: ActionType = actions.pop()
         action: Callable[[], str] = self.actions.get(action_type)
 
         if action_type == ActionType.Search:
             params: SearchParams = self.params_extractor.extract_params_by_words(words)
-            # print(params)
+
             return action(self, params)
 
         return action(self)
@@ -74,13 +72,23 @@ class DialogSystem:
         return "Помощь"
 
     @private
-    def search(self, params: SearchParams) -> str:
-        print(params.capacity_range)
-        print(params.speed_range)
-        print(params.cost_range)
-        print(params.year_range)
-        print(params.purpose)
-        print(params.memory_types)
+    def search(self, search_params: SearchParams) -> str:
+        print("Capacity: ", search_params.capacity_range)
+        print("Speed: ", search_params.speed_range)
+        print("Cost: ", search_params.cost_range)
+        print("Year: ", search_params.year_range)
+        print("Purpose: ", search_params.purpose)
+        print("Type:", search_params.memory_type)
+
+        nodes: List[Node] = self.tree.search(search_params)
+
+        random.seed()
+
+        if nodes is None or nodes == []:
+            return resources.not_found_messages[random.randint(0, len(resources.not_found_messages) - 1)]
+
+        return resources.found_messages[random.randint(0, len(resources.found_messages) - 1)] + \
+            reduce(lambda res, node: res + str(node), nodes, "")
 
     @private
     def unknown(self) -> str:
@@ -89,7 +97,8 @@ class DialogSystem:
 
     @private
     def exit(self) -> str:
-        return "Завершение работы..."
+        random.seed()
+        return resources.exit_messages[random.randint(0, len(resources.exit_messages) - 1)]
 
     actions: Dict[ActionType, Callable[[], str]] = {
         ActionType.Help: help,

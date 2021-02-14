@@ -2,6 +2,7 @@ from typing import List, Dict
 
 from dialog_system.action_type import ActionType
 from dialog_system.param_type import ParamType
+from tree.memory_type import MemoryType
 
 action_synonyms: Dict[str, ParamType] = {
     "помощь": ActionType.Help,
@@ -34,6 +35,7 @@ action_synonyms: Dict[str, ParamType] = {
     "завершить": ActionType.Exit,
     "выход": ActionType.Exit,
     "стоп": ActionType.Exit,
+    "уходить": ActionType.Exit
 }
 
 param_synonyms: Dict[str, ParamType] = {
@@ -45,8 +47,7 @@ param_synonyms: Dict[str, ParamType] = {
     "скорость": ParamType.Speed,
 
     "год": ParamType.Year,
-    "годвыпуск": ParamType.Year,
-    "годрелиз": ParamType.Year,
+    "дата": ParamType.Year,
 
     "стоимость": ParamType.Cost,
     "цена": ParamType.Cost,
@@ -54,7 +55,62 @@ param_synonyms: Dict[str, ParamType] = {
     "назначение": ParamType.Purpose,
 
     "тип": ParamType.Types,
+    "вид": ParamType.Types,
+    "для": ParamType.Types
 }
+
+purpose_synonyms: Dict[str, bool] = {
+    "общий": True,
+    "вторичный": True,
+
+    "первичный": False,
+    "специальный": False,
+    "специализированный": False,
+}
+
+type_synonyms: Dict[str, MemoryType] = {
+    "оперативный": MemoryType.RAM,
+    "оз": MemoryType.RAM,
+
+    "графический": MemoryType.GRAPHIC_MEMORY,
+    "видео": MemoryType.GRAPHIC_MEMORY,
+    "видеопамять": MemoryType.GRAPHIC_MEMORY,
+    "видео-память": MemoryType.GRAPHIC_MEMORY,
+
+    "микроконтроллер": MemoryType.MICRO_RAM,
+
+    "кэш": MemoryType.CACHE_MEMORY,
+    "кэш-память": MemoryType.CACHE_MEMORY,
+
+    "хранение": MemoryType.SECONDARY_MEMORY,
+    "жесткий": MemoryType.SECONDARY_MEMORY,
+    "твердотельный": MemoryType.SECONDARY_MEMORY,
+}
+
+found_messages: List[str] = [
+    "Вот, что я смог найти:\n",
+    "Смотрите, что я нашел:\n",
+    "Здесь все, что удалось найти по вашему запросу:\n",
+    "На основании вашего запроса я нашел вот это:\n",
+    "Это все, что мне удалось найти:\n"
+]
+
+not_found_messages: List[str] = [
+    "Простите, ничего не смог найти по вашему запросу\n",
+    "Извините, по запросу ничего не найдено\n",
+    "Не нашел ничего из того, что вы искали\n",
+    "Не смог найти ничего подходящего\n",
+    "Ничего не найдено по вашему запросу\n",
+]
+
+exit_messages: List[str] = [
+    "Завершение работы...",
+    "Выключаюсь...",
+    "До свиданья!",
+    "Ухожу...",
+    "Пока!",
+    "Сворачиваемся..."
+]
 
 unknown_messages: List[str] = [
     "Извините, не понял вас. Попробуйте задать другой вопрос.",

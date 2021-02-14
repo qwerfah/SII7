@@ -9,8 +9,6 @@ class Node:
     params: NodeParams = None
 
     def __init__(self, json: Dict, parent=None):
-        # print(json)
-
         if "name" in json:
             self.name = json["name"]
         else:
@@ -31,3 +29,6 @@ class Node:
                                      json["params"]["memory_types"])
         else:
             raise ValueError()
+
+    def __str__(self) -> str:
+        return f"\nНаименование: {self.name}\n" + str(self.params)
