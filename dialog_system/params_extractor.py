@@ -68,7 +68,7 @@ class ParamsExtractor:
                 pass
 
         """ Затем в виде диапазона <от a до b> """
-        value_range: Tuple[float, float] = None
+        value_range: Tuple[float, float] = (None, None)
         from_ind: int = -1
 
         """ Сначала ищем нижнюю границу диапазона """
@@ -178,22 +178,23 @@ class ParamsExtractor:
         return values
 
     @private
-    def pack_params(self, param_types: List[ParamType], param_values: List[Tuple[float, float]]) -> SearchParams:
+    def pack_params(self, param_types: List[ParamType],
+                    param_values: List[Union[Tuple[float, float], bool, Enum]]) -> SearchParams:
         """ Упаковывает все найденные параметры в объект класса SearchParams. """
 
         """ Если для значений параметров не были указаны ключевые 
             слова, предугадываем известные типы параметров """
-        for value in param_values:
-            if isinstance(value, bool):
+        for i in range(len(param_values)):
+            if isinstance(param_values[i], bool):
                 try:
                     param_types.index(ParamType.Purpose)
                 except ValueError:
-                    param_types.append(ParamType.Purpose)
-            elif isinstance(value, Enum):
+                    param_types.insert(i, ParamType.Purpose)
+            elif isinstance(param_values[i], Enum):
                 try:
                     param_types.index(ParamType.Types)
                 except ValueError:
-                    param_types.append(ParamType.Types)
+                    param_types.insert(i, ParamType.Types)
 
         print(param_types)
         print(param_values)
