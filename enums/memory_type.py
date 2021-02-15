@@ -6,4 +6,4 @@ class MemoryType(Enum):
     GRAPHIC_MEMORY = "Графическая память"
     MICRO_RAM = "Память микроконтроллеров"
     CACHE_MEMORY = "Кэш-память"
-    SECONDARY_MEMORY = "Вторичная память"
+    SECONDARY_MEMORY = "Устрройство хранения"

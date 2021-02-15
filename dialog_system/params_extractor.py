@@ -4,7 +4,7 @@ from functools import reduce
 from enum import Enum
 
 from dialog_system.search_params import SearchParams
-from dialog_system.param_type import ParamType
+from enums.param_type import ParamType
 import dialog_system.resources as resources
 
 
@@ -199,6 +199,9 @@ class ParamsExtractor:
         print(param_values)
 
         n: int = len(param_types) if len(param_types) <= len(param_values) else len(param_values)
+        if n == 0:
+            return None
+
         search_params: SearchParams = SearchParams()
 
         for i in range(n):

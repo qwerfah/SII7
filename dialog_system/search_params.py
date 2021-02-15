@@ -1,7 +1,7 @@
-from tree.memory_type import MemoryType
+from enums.memory_type import MemoryType
 from tree.node_params import NodeParams
 
-from typing import List, Tuple
+from typing import Tuple
 
 
 class SearchParams:
@@ -48,7 +48,7 @@ class SearchParams:
     def is_satisfies(self, node_params: NodeParams) -> bool:
         points: int = 0
 
-        points += 1 if SearchParams.is_in_range(node_params.max_storage_capacity, self.capacity_range) else 0
+        points += 1 if SearchParams.is_in_range(node_params.capacity, self.capacity_range) else 0
         points += 1 if SearchParams.is_in_range(node_params.max_speed, self.speed_range) else 0
         points += 1 if SearchParams.is_in_range(node_params.release_year, self.year_range) else 0
         points += 1 if SearchParams.is_in_range(node_params.average_cost, self.cost_range) else 0
