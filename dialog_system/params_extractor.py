@@ -16,7 +16,7 @@ class ParamsExtractor:
         """ Извлекает из строки, представленной списком слов, все
             поддерживаемые параметры в интервалах между ключевыми
             словами, исходя из предположения, что между двумя
-            ключевыми словами не может быть больше двух значений парметров. """
+            ключевыми словами не может быть больше двух значений параметров. """
 
         prev_idx: int = 0
         curr_idx: int = 0
@@ -43,7 +43,20 @@ class ParamsExtractor:
         return self.pack_params(param_types, param_values)
 
     @private
-    def extract_num_param(self, words: List[str]) -> (float, float):
+    def try_get_index(self, words: List[str], synonyms: List[str]) -> int:
+        """ Пытыется определить индекс первого вхождения любого из элементов списка 
+            synonyms в список words. Если ни один из них не содержится в words, возвращает None. """
+
+        for symonym in synonyms:
+            try:
+                return words.index(symonym)
+            except ValueError:
+                continue
+        
+        return None
+
+    @private
+    def extract_num_param(self, words: List[str]) -> Tuple[float, float]:
         """ Извлекает из указанного набора слов первый
             числовой параметр в виде диапазона или скалярного значения. """
 
@@ -53,7 +66,6 @@ class ParamsExtractor:
         try:
             ind: int = words.index("-")
             value_range: Tuple[float, float] = float(words[ind - 1]), float(words[ind + 1])
-            # del sub_words[ind - 1], sub_words[ind], sub_words[ind + 1]
             ranges.update({(ind - 1, ind, ind + 1): value_range})
         except ValueError:
             pass
@@ -62,38 +74,29 @@ class ParamsExtractor:
             try:
                 value_range = list(map(float, words[i].split('-')))
                 if len(value_range) == 2:
-                    # del sub_words[i]
                     ranges.update({tuple([i]): value_range})
             except ValueError:
                 pass
 
-        """ Затем в виде диапазона <от a до b> """
+        """ Затем в виде диапазона <от a до b>.
+            Сначала ищем нижнюю границу диапазона. """
         value_range: Tuple[float, float] = (None, None)
-        from_ind: int = -1
-
-        """ Сначала ищем нижнюю границу диапазона """
-        try:
-            from_ind = words.index("от")
+        from_ind: int = self.try_get_index(words, resources.from_synonyms)
+        if from_ind is not None:
             value_range = float(words[from_ind + 1]), None
-            # del sub_words[from_ind], sub_words[from_ind + 1]
             ranges.update({(from_ind, from_ind + 1): value_range})
-        except ValueError:
-            pass
 
-        """ Затем ищем верхнюю границу диапазона """
-        try:
-            to_ind = words.index("до")
+        """ Затем ищем верхнюю границу диапазона. """
+        to_ind: int = self.try_get_index(words, resources.to_synonyms)
+        if to_ind is not None:
             value_range = value_range[0], float(words[to_ind + 1])
-            # del sub_words[to_ind], sub_words[to_ind + 1]
-            if from_ind != -1:
+            if from_ind is not None and to_ind >= from_ind and value_range[0] <= value_range[1]:
                 del ranges[(from_ind, from_ind + 1)]
                 ranges.update({(from_ind, from_ind + 1, to_ind, to_ind + 1): value_range})
             else:
                 ranges.update({(to_ind, to_ind + 1): value_range})
-        except ValueError:
-            pass
 
-        """ Если ранее ничего не было найдено, ищем в виде скалярного значения """
+        """ Если ранее ничего не было найдено, ищем в виде скалярного значения. """
         for i in set(range(len(words))) - set(reduce(lambda lst, el: lst + el, ranges, ())):
             try:
                 value = float(words[i])
@@ -102,7 +105,7 @@ class ParamsExtractor:
             except ValueError:
                 pass
 
-        """ Выбираем первое из всех найденных значений (если их было несколько) """
+        """ Выбираем первое из всех найденных значений (если их было несколько). """
         min_el: Tuple[int, ...] = tuple([len(words)])
         for elem in ranges:
             if elem[0] <= min_el[0]:

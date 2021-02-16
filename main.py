@@ -5,7 +5,7 @@ from user_interface import UserInterface
 if __name__ == "__main__":
     analyzer = pymorphy2.MorphAnalyzer()
 
-    print(analyzer.parse("lto")[0].normal_form)
+    # print(analyzer.parse("менее")[0].normal_form)
 
     interface: UserInterface = UserInterface()
     interface.loop()

@@ -95,6 +95,7 @@ class DialogSystem:
         return resources.found_messages[random.randint(0, len(resources.found_messages) - 1)] + \
             reduce(lambda res, n: res + str(n), nodes, "")
 
+    @private
     def compare(self, words: List[str]) -> str:
         """ Сравнение двух указанных типов памяти.
             (если указано больше двух, рассматриваются только первые два) """

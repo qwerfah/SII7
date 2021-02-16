@@ -39,6 +39,7 @@ action_synonyms: Dict[str, ParamType] = {
 
     "выйти": ActionType.Exit,
     "конец": ActionType.Exit,
+    "пока": ActionType.Exit,
     "завершение": ActionType.Exit,
     "завершить": ActionType.Exit,
     "выход": ActionType.Exit,
@@ -76,6 +77,26 @@ purpose_synonyms: Dict[str, bool] = {
     "специализированный": False,
 }
 
+from_synonyms: List[str] = [
+    "от",
+    "более",
+    "большой",
+    "выше",
+    "свыше",
+    "поздний",
+    "после"
+]
+
+to_synonyms: List[str] = [
+    "до",
+    "маленький",
+    "менее",
+    "ниже",
+    "ранее",
+    "ранний",
+    "перед"
+]
+
 type_synonyms: Dict[str, MemoryType] = {
     "оперативный": MemoryType.RAM,
     "оз": MemoryType.RAM,
@@ -91,7 +112,7 @@ type_synonyms: Dict[str, MemoryType] = {
     "кэш-память": MemoryType.CACHE_MEMORY,
 
     "хранение": MemoryType.SECONDARY_MEMORY,
-    "жесткий": MemoryType.SECONDARY_MEMORY,
+    "жёсткий": MemoryType.SECONDARY_MEMORY,
     "твердотельный": MemoryType.SECONDARY_MEMORY,
 }
 
